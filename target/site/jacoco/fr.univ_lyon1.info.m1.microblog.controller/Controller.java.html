@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Controller.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.controller</a> &gt; <span class="el_source">Controller.java</span></div><h1>Controller.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.controller;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+import fr.univ_lyon1.info.m1.microblog.model.Message;
+import fr.univ_lyon1.info.m1.microblog.model.MessageData;
+import fr.univ_lyon1.info.m1.microblog.model.User;
+import fr.univ_lyon1.info.m1.microblog.model.Y;
+import fr.univ_lyon1.info.m1.microblog.model.scoring.ScoringStrategies;
+import fr.univ_lyon1.info.m1.microblog.view.JfxView;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+
+
+/**
+ * Main class of the Controller (GUI) of the application.
+ */
+public class Controller {
+    private final Y model;
+<span class="fc" id="L25">    private final List&lt;JfxView&gt; views = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Main Controller of the application.
+     */
+<span class="fc" id="L30">    public Controller(final Y model, final Stage stage) {</span>
+<span class="fc" id="L31">        this.model = model;</span>
+        // la vue par défaut
+<span class="fc" id="L33">        this.addView(stage, 600, 600);</span>
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * Get the model (for ControllerTest only).
+     */
+    public Y getModel() {
+<span class="fc" id="L40">        return model;</span>
+    }
+
+    /**
+     * Get the list of the views (for ControllerTest only).
+     */
+    public List&lt;JfxView&gt; getViews() {
+<span class="fc" id="L47">        return views;</span>
+    }
+
+    /**
+     * Add view.
+     */
+    public void addView(final Stage stage, final int width, final int height) {
+<span class="fc" id="L54">        this.views.add(new JfxView(stage, width, height));</span>
+<span class="fc" id="L55">        views.get(views.size() - 1).setController(this);</span>
+<span class="fc" id="L56">    }</span>
+
+    /**
+     * Init view.
+     */
+    public void initView() {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for (JfxView view : views) {</span>
+<span class="nc" id="L63">            view.createUserSelectionPane(model.getUsers());</span>
+<span class="nc" id="L64">        }</span>
+        // parce qu'on a déjà chargé des données, on met à jour
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (model.getCurrentUser() != null) {</span>
+<span class="nc" id="L67">            applyStrategy(model.getCurrentStrategyUser().get(model.getCurrentUser()));</span>
+        }
+<span class="nc" id="L69">        refreshView(model.getUsers());</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Handle bookmarks button.
+     */
+    public void handlerBookmarkButton(final MessageData d,
+                                    final Message m,
+                                    final Button bookButton,
+                                    final User u) {
+<span class="fc" id="L79">        model.bookmarkMessage(d, m, u);</span>
+<span class="fc" id="L80">        bookButton.setText(bookmarkText(d));</span>
+<span class="fc" id="L81">        refreshView(model.getUsers());</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Set the bookmark text.
+     */
+    public String bookmarkText(final MessageData d) {
+<span class="fc" id="L88">        boolean bookmarked = d.isBookmarked();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (bookmarked) {</span>
+<span class="fc" id="L90">            return &quot;⭐&quot;;</span>
+        } else {
+<span class="fc" id="L92">            return &quot;Click to bookmark&quot;;</span>
+        }
+    }
+
+    /**
+     * Handle delete button.
+     */
+    public void deleteMessage(final Message m) {
+<span class="fc" id="L100">        model.deleteMessage(m);</span>
+<span class="fc" id="L101">        refreshView(model.getUsers());</span>
+<span class="fc" id="L102">    }</span>
+
+
+    /**
+     * Publish a message.
+     */
+    public void publish(final TextArea t, final User u) {
+<span class="fc" id="L109">        int size = model.getUserMessageMap(u).size();</span>
+<span class="fc" id="L110">        String messageContent = t.getText();</span>
+
+<span class="fc" id="L112">        model.addMessage(new Message(size, messageContent), u);</span>
+<span class="fc" id="L113">        refreshView(model.getUsers());</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Set the Scoring strategy.
+     */
+    public void setScoringStrategy(final ScoringStrategies s) {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (s == null) {</span>
+<span class="fc" id="L121">            model.resetToDefaultScoring();</span>
+        } else {
+<span class="fc" id="L123">            model.removeScoringSystem();</span>
+<span class="fc" id="L124">            model.setScoringSystem(s);</span>
+        }
+<span class="fc" id="L126">        model.sortMessages();</span>
+<span class="fc" id="L127">        refreshView(model.getUsers());</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Filter the messages that can be seen by a user.
+     */
+    public Map&lt;Message, MessageData&gt; filterMessages(final Map&lt;Message, MessageData&gt; userMessages) {
+<span class="fc" id="L134">        Map&lt;Message, MessageData&gt; filteredMessages = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (Map.Entry&lt;Message, MessageData&gt; entry : userMessages.entrySet()) {</span>
+<span class="fc" id="L136">            Message message = entry.getKey();</span>
+<span class="fc" id="L137">            MessageData messageData = entry.getValue();</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (model.canBeSeen(messageData)) {</span>
+<span class="fc" id="L139">                filteredMessages.put(message, messageData);</span>
+            }
+<span class="fc" id="L141">        }</span>
+<span class="fc" id="L142">        return filteredMessages;</span>
+    }
+
+
+    /**
+     * Refresh the view.
+     */
+    public void refreshView(final Collection&lt;User&gt; usersList) {
+<span class="fc" id="L150">        User currentUser = model.getCurrentUser();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (currentUser != null) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for (JfxView view : views) {</span>
+<span class="fc" id="L153">                view.setupUserFeedHeader(currentUser.getUserTag());</span>
+<span class="fc" id="L154">                Map&lt;Message, MessageData&gt; userMessages = model.getUserMessageMap(currentUser);</span>
+<span class="fc" id="L155">                Map&lt;Message, MessageData&gt; filteredMessages = filterMessages(userMessages);</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">                for (Map.Entry&lt;Message, MessageData&gt; entry : filteredMessages.entrySet()) {</span>
+<span class="fc" id="L157">                    Message m = entry.getKey();</span>
+<span class="fc" id="L158">                    MessageData d = entry.getValue();</span>
+<span class="fc" id="L159">                    view.addMessageToFeed(m, d, currentUser);</span>
+<span class="fc" id="L160">                }</span>
+<span class="fc" id="L161">                view.showUserFeed(currentUser);</span>
+<span class="fc" id="L162">            }</span>
+        } else {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">            for (JfxView view : views) {</span>
+<span class="fc" id="L165">                view.createUserSelectionPane(usersList);</span>
+<span class="fc" id="L166">            }</span>
+        }
+<span class="fc" id="L168">    }</span>
+
+    /**
+     * Select the current user.
+     */
+    public void selectUser(final User user) {
+<span class="nc" id="L174">        model.setCurrentUser(user);</span>
+<span class="nc" id="L175">        applyStrategy(model.getCurrentStrategyUser().get(model.getCurrentUser()));</span>
+<span class="nc" id="L176">        refreshView(model.getUsers());</span>
+<span class="nc" id="L177">    }</span>
+
+    /**
+     * Back to the users List.
+     */
+    public void backToUsersList() {
+<span class="nc" id="L183">        model.setCurrentUser(null);</span>
+<span class="nc" id="L184">        refreshView(model.getUsers());</span>
+<span class="nc" id="L185">    }</span>
+
+    /**
+     * Apply the strategy of sorting/scoring selected.
+     */
+    public void applyStrategy(final String selectedOption) {
+<span class="pc bpc" id="L191" title="1 of 4 branches missed.">        switch (selectedOption) {</span>
+            case &quot;Par ordre chronologique&quot;:
+<span class="fc" id="L193">                model.applyChronologicalStrategy();</span>
+<span class="fc" id="L194">                break;</span>
+
+            case &quot;Messages les plus pertinents récents&quot;:
+<span class="fc" id="L197">                model.applyRecentRelevantMessagesStrategy();</span>
+<span class="fc" id="L198">                break;</span>
+
+            case &quot;Messages les plus pertinents&quot;:
+<span class="fc" id="L201">                model.applyRelevantMessagesStrategy();</span>
+<span class="fc" id="L202">                break;</span>
+
+            default: break;
+        }
+        // attention : replace ça veut dire qu'il faut que l'user existe
+<span class="fc" id="L207">        model.getCurrentStrategyUser().replace(model.getCurrentUser(), selectedOption);</span>
+<span class="fc" id="L208">        model.sortMessages();</span>
+<span class="fc" id="L209">        refreshView(model.getUsers());</span>
+<span class="fc" id="L210">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

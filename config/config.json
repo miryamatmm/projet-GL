@@ -1,0 +1,56 @@
+{
+  "users" : [ {
+    "usertag" : "mariamlasultane",
+    "userStrategy" : "Messages les plus pertinents"
+  }, {
+    "usertag" : "miryamlastar",
+    "userStrategy" : "Messages les plus pertinents récents"
+  }, {
+    "usertag" : "aleynalaqueen",
+    "userStrategy" : "Par ordre chronologique"
+  } ],
+  "messages" : [ {
+    "id" : 7,
+    "usertag" : "aleynalaqueen",
+    "content" : "moi aussi je veux mettre des messages",
+    "bookmarkedByUsers" : [ "mariamlasultane" ],
+    "creationTimestamp" : 1734112811360
+  }, {
+    "id" : 7,
+    "usertag" : "aleynalaqueen",
+    "content" : "je sais pas un message",
+    "bookmarkedByUsers" : [ ],
+    "creationTimestamp" : 1734169404488
+  }, {
+    "id" : 2,
+    "usertag" : "miryamlastar",
+    "content" : "incroyable sah",
+    "bookmarkedByUsers" : [ ],
+    "creationTimestamp" : 1733075585596
+  }, {
+    "id" : 1,
+    "usertag" : "mariamlasultane",
+    "content" : "mais wsh",
+    "bookmarkedByUsers" : [ ],
+    "creationTimestamp" : 1732991697597
+  }, {
+    "id" : 3,
+    "usertag" : "mariamlasultane",
+    "content" : "poupette",
+    "bookmarkedByUsers" : [ ],
+    "creationTimestamp" : 1734086431210
+  }, {
+    "id" : 5,
+    "usertag" : "mariamlasultane",
+    "content" : "poupette allan",
+    "bookmarkedByUsers" : [ "mariamlasultane" ],
+    "creationTimestamp" : 1734086467676
+  }, {
+    "id" : 4,
+    "usertag" : "mariamlasultane",
+    "content" : "Macron",
+    "bookmarkedByUsers" : [ ],
+    "creationTimestamp" : 1734086423733
+  } ],
+  "currentUser" : "mariamlasultane"
+}

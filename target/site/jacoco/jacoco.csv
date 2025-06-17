@@ -1,0 +1,18 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Y Microblogging,fr.univ_lyon1.info.m1.microblog,App,41,0,0,0,14,0,4,0,4,0
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.view,JfxView,56,492,6,2,19,107,10,10,7,9
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.scoring,BookmarkScoring,0,25,0,4,0,7,0,4,0,2
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.scoring,MalusScoring,2,169,0,4,1,17,1,4,1,2
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.scoring,ScoringSystem,0,68,0,0,0,18,0,8,0,8
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.scoring,DateScoring,2,30,0,4,1,10,1,4,1,2
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model,Message,0,15,0,0,0,6,0,3,0,3
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model,User,0,29,0,0,0,10,0,5,0,5
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model,MessageData,5,145,3,13,1,42,3,20,0,15
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model,Y,123,647,20,38,34,150,17,42,3,27
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.controller,Controller,67,276,6,18,14,69,7,21,3,12
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.dto,MessageDTO,0,68,1,1,0,26,1,12,0,12
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.dto,UserDTO,0,17,0,0,0,7,0,5,0,5
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.dto,YData,0,34,0,0,0,12,0,7,0,7
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.sorting,DateSortingStrategy,0,15,0,0,0,3,0,3,0,3
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.model.sorting,ScoreSortingStrategy,0,17,0,0,0,3,0,3,0,3
+Y Microblogging,fr.univ_lyon1.info.m1.microblog.config,InitialConfig,95,0,4,0,29,0,5,0,3,0

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessageData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.model</a> &gt; <span class="el_source">MessageData.java</span></div><h1>MessageData.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.model;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Piece of data associated to a message for a particular user.
+ */
+public class MessageData {
+    /**
+     * Represents the data associated with a message.
+     */
+<span class="fc" id="L14">    private Date dateCreation = new Date();</span>
+<span class="fc" id="L15">    private boolean isBookmarked = false;</span>
+<span class="fc" id="L16">    private int score = -1;</span>
+<span class="fc" id="L17">    private Set&lt;String&gt; words = new HashSet&lt;&gt;();</span>
+    // les utilisateurs qui ont bookmark ce message
+<span class="fc" id="L19">    private final Set&lt;User&gt; bookmarkedUsers = new HashSet&lt;&gt;();</span>
+
+    private User user;
+
+    /**
+     * Construct a MessageData Object.
+     */
+<span class="fc" id="L26">    public MessageData() { }</span>
+
+    /**
+     * Get the User.
+     */
+    public User getUser() {
+<span class="fc" id="L32">        return user;</span>
+    }
+
+    /**
+     * Construct a MessageData Object with a User.
+     */
+<span class="fc" id="L38">    public MessageData(final User user) {</span>
+<span class="fc" id="L39">        this.user = user;</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Get the Date.
+     */
+    public Date getDate() { 
+<span class="fc" id="L46">        return dateCreation; </span>
+    }
+
+    /**
+     * Returns the set of words associated with the message.
+     *
+     * @return the set of words
+     */
+    public Set&lt;String&gt; getWords() {
+<span class="fc" id="L55">        return words;</span>
+    }
+
+    /**
+     * Sets the date of creation associated with the message.
+     */
+    public void setDateCreation(final Date dateCreation) {
+<span class="fc" id="L62">        this.dateCreation = dateCreation;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Sets the set of words associated with the message.
+     *
+     * @param words the set of words
+     */
+    public void setWords(final Set&lt;String&gt; words) {
+<span class="fc" id="L71">        this.words = words;</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Returns the score of the message.
+     *
+     * @return the score
+     */
+    public int getScore() {
+<span class="fc" id="L80">        return score;</span>
+    }
+
+    /**
+     * Sets the score of the message.
+     *
+     * @param score the score
+     */
+    public void setScore(final int score) {
+<span class="fc" id="L89">        this.score = score;</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Returns whether the message is bookmarked or not.
+     *
+     * @return true if the message is bookmarked, false otherwise
+     */
+    public boolean isBookmarked() {
+<span class="fc" id="L98">        return isBookmarked;</span>
+    }
+
+    /**
+     * Sets whether the message is bookmarked or not.
+     *
+     * @param bookmarked true if the message is bookmarked, false otherwise
+     */
+    public void setBookmarked(final boolean bookmarked) {
+<span class="fc" id="L107">        this.isBookmarked = bookmarked;</span>
+<span class="fc" id="L108">    }</span>
+
+        /**
+     * Returns the set of users who have bookmarked this message.
+     *
+     * @return the set of users
+     */
+    public Set&lt;User&gt; getBookmarkedUsers() {
+<span class="fc" id="L116">        return bookmarkedUsers;</span>
+    }
+
+    /**
+     * Adds a user to the list of users who have bookmarked this message.
+     *
+     * @param user the user to add
+     */
+    public void addBookmarkedUser(final User user) {
+<span class="fc" id="L125">        bookmarkedUsers.add(user);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Removes a user from the list of users who have bookmarked this message.
+     *
+     * @param user the user to remove
+     */
+    public void removeBookmarkedUser(final User user) {
+<span class="fc" id="L134">        bookmarkedUsers.remove(user);</span>
+        // met à jour l'état de bookmark si aucune autre personne n'a bookmarké
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        isBookmarked = !bookmarkedUsers.isEmpty();</span>
+<span class="fc" id="L137">    }</span>
+
+    /**
+     * Compare two Messages metadata. Suitable for sorting.
+     */
+    public int compare(final MessageData rightData) {
+<span class="fc" id="L143">        int scoreLeft = getScore();</span>
+<span class="fc" id="L144">        boolean isBookmarkedLeft = isBookmarked();</span>
+
+<span class="fc" id="L146">        int scoreRight = rightData.getScore();</span>
+<span class="fc" id="L147">        boolean isBookmarkedRight = rightData.isBookmarked();</span>
+
+        // on traite dans un premier temps le fait qu'il soit bookmarké ou pas
+
+<span class="pc bpc" id="L151" title="1 of 4 branches missed.">        if (isBookmarkedLeft &amp;&amp; !isBookmarkedRight) {</span>
+<span class="fc" id="L152">            return 1;</span>
+<span class="pc bpc" id="L153" title="1 of 4 branches missed.">        } else if (!isBookmarkedLeft &amp;&amp; isBookmarkedRight) {</span>
+<span class="fc" id="L154">            return -1;</span>
+        }
+
+        // sinon on traite juste avec le score
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (scoreLeft &lt; scoreRight) {</span>
+<span class="fc" id="L160">            return -1;</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        } else if (scoreLeft == scoreRight) {</span>
+<span class="fc" id="L162">            return 0;</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">        } else if (scoreLeft &gt; scoreRight) {</span>
+<span class="fc" id="L164">            return 1;</span>
+        }
+<span class="nc" id="L166">        throw new AssertionError(&quot;Case not covered in comparision&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

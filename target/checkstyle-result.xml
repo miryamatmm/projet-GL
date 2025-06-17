@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.17.0">
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/dto/MessageDTO.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/dto/YData.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/dto/UserDTO.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/config/InitialConfig.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/controller/Controller.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/Message.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/User.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/MessageData.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/sorting/ScoreSortingStrategy.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/sorting/SortingStrategies.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/sorting/DateSortingStrategy.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/scoring/MalusScoring.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/scoring/BookmarkScoring.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/scoring/DateScoring.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/scoring/ScoringStrategies.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/scoring/ScoringSystem.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/model/Y.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/view/JfxView.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/main/java/fr/univ_lyon1/info/m1/microblog/App.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/dto/MessageDTOTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/dto/YDataTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/dto/UserDTOTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/controller/ControllerTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/UserTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/YTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/SortingTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/MessageTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/ScoringTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/model/MessageDataTest.java">
+</file>
+<file name="/Users/oukhtykitty/Desktop/Cours/M1/S1/GL/mif01/microblog/src/test/java/fr/univ_lyon1/info/m1/microblog/view/JfxViewTest.java">
+</file>
+</checkstyle>

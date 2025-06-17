@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Y.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.model</a> &gt; <span class="el_source">Y.java</span></div><h1>Y.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.model;
+
+import fr.univ_lyon1.info.m1.microblog.dto.MessageDTO;
+import fr.univ_lyon1.info.m1.microblog.dto.UserDTO;
+import fr.univ_lyon1.info.m1.microblog.dto.YData;
+
+import fr.univ_lyon1.info.m1.microblog.model.scoring.BookmarkScoring;
+import fr.univ_lyon1.info.m1.microblog.model.scoring.MalusScoring;
+import fr.univ_lyon1.info.m1.microblog.model.scoring.ScoringStrategies;
+import fr.univ_lyon1.info.m1.microblog.model.scoring.ScoringSystem;
+import fr.univ_lyon1.info.m1.microblog.model.scoring.DateScoring;
+
+import fr.univ_lyon1.info.m1.microblog.model.sorting.DateSortingStrategy;
+import fr.univ_lyon1.info.m1.microblog.model.sorting.SortingStrategies;
+import fr.univ_lyon1.info.m1.microblog.model.sorting.ScoreSortingStrategy;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+
+
+/**
+ * Toplevel class for the Y microblogging application's model.
+ */
+public class Y {
+
+<span class="fc" id="L34">    private final List&lt;User&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L35">    private final Map&lt;User, Map&lt;Message, MessageData&gt;&gt; userMessageMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L36">    private final ScoringSystem scoringSystem = new ScoringSystem();</span>
+<span class="fc" id="L37">    private SortingStrategies sortingStrategy = new ScoreSortingStrategy();</span>
+<span class="fc" id="L38">    private final Map&lt;User, String&gt; currentStrategyUser = new HashMap&lt;&gt;();</span>
+    private User currentUser;
+
+    /**
+     * Model constructor.
+     */
+<span class="fc" id="L44">    public Y() { }</span>
+
+    /**
+     * Get the current user logged in the application.
+     * * If nobody is logged, it's null
+     */
+    public User getCurrentUser() {
+<span class="fc" id="L51">        return currentUser;</span>
+    }
+
+    /**
+     * Set the current user logged in the application.
+     * If nobody is logged, it's null
+     */
+    public void setCurrentUser(final User currentUser) {
+<span class="fc" id="L59">        this.currentUser = currentUser;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Get the User.
+     */
+    public Collection&lt;User&gt; getUsers() {
+<span class="fc" id="L66">        return users;</span>
+    }
+
+    /**
+     * Get the User Message Map.
+     */
+    public Map&lt;Message, MessageData&gt; getUserMessageMap(final User u) {
+<span class="pc" id="L73">        return userMessageMap.computeIfAbsent(u, k -&gt; new LinkedHashMap&lt;&gt;());</span>
+    }
+
+    /**
+     * Set the User Message Map.
+     */
+    public void setUserMessageMap(final User u, final Map&lt;Message, MessageData&gt; messages) {
+<span class="fc" id="L80">        userMessageMap.put(u, messages);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Create a user and add it to the user's registry.
+     * Ensures that userTag is unique.
+     */
+    public void createUser(final String userTag) {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (users.stream().anyMatch(user -&gt; user.getUserTag().equals(userTag))) {</span>
+<span class="fc" id="L89">            throw new IllegalArgumentException(&quot;User with tag '&quot; + userTag + &quot;' already exists.&quot;);</span>
+        }
+
+<span class="fc" id="L92">        User u = new User(userTag);</span>
+<span class="fc" id="L93">        users.add(u);</span>
+<span class="fc" id="L94">        userMessageMap.put(u, new LinkedHashMap&lt;&gt;());</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Finds a user by their usertag.
+     */
+    public User findUserByTag(final String usertag) {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for (User user : users) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if (user.getUserTag().equals(usertag)) {</span>
+<span class="fc" id="L103">                return user;</span>
+            }
+<span class="fc" id="L105">        }</span>
+<span class="fc" id="L106">        return null;</span>
+    }
+
+    /**
+     * Add message m to all users.
+     */
+    public void addMessage(final Message m, final User u) {
+<span class="fc" id="L113">        String[] words = m.getContent().toLowerCase().split(&quot;[^\\p{Alpha}]+&quot;);</span>
+<span class="fc" id="L114">        Set&lt;String&gt; wordSet = new HashSet&lt;&gt;(Arrays.asList(words));</span>
+
+        // Pour chaque utilisateur, ajoute le message à sa map
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (User user : getUsers()) {</span>
+<span class="fc" id="L118">            Map&lt;Message, MessageData&gt; userMessages = getUserMessageMap(user);</span>
+<span class="fc" id="L119">            MessageData messageData = new MessageData(u);</span>
+<span class="fc" id="L120">            messageData.setWords(wordSet);</span>
+<span class="fc" id="L121">            userMessages.put(m, messageData);</span>
+<span class="fc" id="L122">        }</span>
+
+<span class="fc" id="L124">        sortMessages();</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Bookmark or unbookmark a message.
+     */
+    public void bookmarkMessage(final MessageData d, final Message m, final User u) {
+        // on extrait les mots du message
+<span class="fc" id="L132">        String[] words = m.getContent().split(&quot;[^\\p{Alpha}]+&quot;);</span>
+<span class="fc" id="L133">        Set&lt;String&gt; wordSet = new HashSet&lt;&gt;(Arrays.asList(words));</span>
+
+<span class="fc" id="L135">        d.setWords(wordSet);</span>
+
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (d.getBookmarkedUsers().contains(u)) {</span>
+            // si l'utilisateur a déjà bookmarké ce message
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            for (String word : wordSet) {</span>
+<span class="nc" id="L140">                u.getBookmarkedWords().remove(word);</span>
+<span class="nc" id="L141">            }</span>
+<span class="nc" id="L142">            d.removeBookmarkedUser(u);</span>
+<span class="nc" id="L143">            d.setBookmarked(false);</span>
+        } else {
+<span class="fc" id="L145">            d.addBookmarkedUser(u);</span>
+<span class="fc" id="L146">            d.setBookmarked(true);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            for (String word : wordSet) {</span>
+<span class="fc" id="L148">                u.getBookmarkedWords().add(word);</span>
+<span class="fc" id="L149">            }</span>
+        }
+
+        // on met à jour la liste dans la map de chaque utilisateur (pr json)
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        for (User user : getUsers()) {</span>
+<span class="fc" id="L154">            Map&lt;Message, MessageData&gt; userMessages = getUserMessageMap(user);</span>
+<span class="fc" id="L155">            MessageData userMessageData = userMessages.computeIfAbsent(m,</span>
+<span class="nc" id="L156">                    k -&gt; new MessageData(d.getUser()));</span>
+
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">            if (d.getBookmarkedUsers().contains(u)) {</span>
+<span class="fc" id="L159">                userMessageData.addBookmarkedUser(u);</span>
+            } else {
+<span class="nc" id="L161">                userMessageData.removeBookmarkedUser(u);</span>
+            }
+<span class="fc" id="L163">        }</span>
+
+<span class="fc" id="L165">        sortMessages();</span>
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * Delete a message.
+     */
+    public void deleteMessage(final Message m) {
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (User u : users) {</span>
+<span class="fc" id="L173">            Map&lt;Message, MessageData&gt; userMessages = getUserMessageMap(u);</span>
+<span class="fc" id="L174">            MessageData messageData = userMessages.get(m);</span>
+<span class="fc" id="L175">            Set&lt;String&gt; wordsToRemove = messageData.getWords();</span>
+
+            // on supprime les mots des bookmarked words si le message a été bookmarké
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            for (String word : wordsToRemove) {</span>
+<span class="fc" id="L179">                u.getBookmarkedWords().remove(word);</span>
+<span class="fc" id="L180">            }</span>
+
+<span class="fc" id="L182">            userMessages.remove(m);</span>
+<span class="fc" id="L183">        }</span>
+
+<span class="fc" id="L185">        sortMessages();</span>
+<span class="fc" id="L186">    }</span>
+
+    /**
+     * Return true if the message should be displayed.
+     */
+    public boolean canBeSeen(final MessageData d) {
+<span class="fc" id="L192">        int seuil = 0;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        return d.getScore() &gt; seuil;</span>
+    }
+
+    /**
+     * Sort the Messages.
+     */
+    public void sortMessages() {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        for (User u : users) {</span>
+<span class="fc" id="L201">            Map&lt;Message, MessageData&gt; messageList = getUserMessageMap(u);</span>
+<span class="fc" id="L202">            LinkedHashMap&lt;Message, MessageData&gt; sortedMessageList = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L203">            scoringSystem.calculateTotalScore(messageList, u);</span>
+<span class="fc" id="L204">            messageList.entrySet()</span>
+<span class="fc" id="L205">                    .stream()</span>
+<span class="fc" id="L206">                    .sorted(sortingStrategy.getComparator(u))</span>
+<span class="fc" id="L207">                    .forEach(e -&gt; {</span>
+<span class="fc" id="L208">                        sortedMessageList.put(e.getKey(), e.getValue());</span>
+<span class="fc" id="L209">                    });</span>
+<span class="fc" id="L210">            setUserMessageMap(u, sortedMessageList);</span>
+<span class="fc" id="L211">        }</span>
+<span class="fc" id="L212">    }</span>
+
+    /**
+     * Get the map of the current strategy.
+     */
+    public Map&lt;User, String&gt; getCurrentStrategyUser() {
+<span class="fc" id="L218">        return currentStrategyUser;</span>
+    }
+
+    /**
+     * Set scoring strategies.
+     */
+    public void setScoringSystem(final ScoringStrategies s) {
+<span class="fc" id="L225">        scoringSystem.addRule(s);</span>
+<span class="fc" id="L226">    }</span>
+
+    /**
+     * Set the sorting strategy.
+     */
+    public void setSortingStrategy(final SortingStrategies sortingStrategy) {
+<span class="fc" id="L232">        this.sortingStrategy = sortingStrategy;</span>
+<span class="fc" id="L233">    }</span>
+
+    /**
+     * Get the sorting strategy.
+     */
+    public SortingStrategies getSortingStrategy() {
+<span class="fc" id="L239">        return sortingStrategy;</span>
+    }
+
+    /**
+     * Remove all scoring strategies.
+     */
+    public void removeScoringSystem() {
+<span class="fc" id="L246">        scoringSystem.clearRules();</span>
+<span class="fc" id="L247">    }</span>
+
+    /**
+     * Get scoring strategies.
+     */
+    public ScoringSystem getScoringSystem() {
+<span class="fc" id="L253">        return scoringSystem;</span>
+    }
+
+    /**
+     * Reset the scoring system to its default configuration.
+     */
+    public void resetToDefaultScoring() {
+<span class="fc" id="L260">        scoringSystem.clearRules();</span>
+<span class="fc" id="L261">        scoringSystem.addRule(new BookmarkScoring());</span>
+<span class="fc" id="L262">        scoringSystem.addRule(new MalusScoring());</span>
+<span class="fc" id="L263">    }</span>
+
+    /**
+     * Applies a sorting strategy based solely on chronological order.
+     */
+    public void applyChronologicalStrategy() {
+<span class="fc" id="L269">        removeScoringSystem();</span>
+<span class="fc" id="L270">        setSortingStrategy(new DateSortingStrategy());</span>
+<span class="fc" id="L271">    }</span>
+
+    /**
+     * Applies a sorting strategy that prioritizes the most relevant recent messages.
+     */
+    public void applyRecentRelevantMessagesStrategy() {
+<span class="fc" id="L277">        removeScoringSystem();</span>
+<span class="fc" id="L278">        setSortingStrategy(new ScoreSortingStrategy());</span>
+<span class="fc" id="L279">        setScoringSystem(new DateScoring());</span>
+<span class="fc" id="L280">        setScoringSystem(new MalusScoring());</span>
+<span class="fc" id="L281">        setScoringSystem(new BookmarkScoring());</span>
+<span class="fc" id="L282">    }</span>
+
+    /**
+     * Applies a sorting strategy that prioritizes the most relevant messages overall.
+     */
+    public void applyRelevantMessagesStrategy() {
+<span class="fc" id="L288">        removeScoringSystem();</span>
+<span class="fc" id="L289">        setSortingStrategy(new ScoreSortingStrategy());</span>
+<span class="fc" id="L290">        setScoringSystem(new MalusScoring());</span>
+<span class="fc" id="L291">        setScoringSystem(new BookmarkScoring());</span>
+<span class="fc" id="L292">    }</span>
+
+    /**
+     * Imports data from a YData object into the model.
+     */
+    public void importData(final YData data) {
+<span class="fc" id="L298">        users.clear();</span>
+<span class="fc" id="L299">        userMessageMap.clear();</span>
+
+        // création des utilisateurs
+<span class="fc bfc" id="L302" title="All 2 branches covered.">        for (UserDTO userDTO : data.getUsers()) {</span>
+<span class="fc" id="L303">            createUser(userDTO.getUsertag());</span>
+<span class="fc" id="L304">            currentStrategyUser.put(findUserByTag(userDTO.getUsertag()), userDTO.getUserStrategy());</span>
+<span class="fc" id="L305">        }</span>
+
+        // création des messages
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        for (MessageDTO messageDTO : data.getMessages()) {</span>
+<span class="fc" id="L309">            User creator = findUserByTag(messageDTO.getUsertag());</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">            if (creator != null) {</span>
+
+<span class="fc" id="L312">                Message message = new Message(messageDTO.getId(), messageDTO.getContent());</span>
+<span class="fc" id="L313">                addMessage(message, creator);</span>
+
+                // pour récupérer la date des messages
+<span class="fc bfc" id="L316" title="All 2 branches covered.">                for (User user : getUsers()) {</span>
+<span class="fc" id="L317">                    Map&lt;Message, MessageData&gt; userMessages = getUserMessageMap(user);</span>
+<span class="fc" id="L318">                    MessageData messageData = userMessages.get(message);</span>
+
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                    if (messageData != null) {</span>
+                        // Assigner la date de création du message
+<span class="fc" id="L322">                        messageData.setDateCreation(new Date(messageDTO.getCreationTimestamp()));</span>
+                    }
+<span class="fc" id="L324">                }</span>
+
+                // mettre à jour le bookmarkage pour chaque userMessageMap
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">                for (String bookmarkUserTag : messageDTO.getBookmarkedByUsers()) {</span>
+<span class="nc" id="L328">                    User bookmarkUser = findUserByTag(bookmarkUserTag);</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">                    if (bookmarkUser != null) {</span>
+<span class="nc" id="L330">                        Map&lt;Message, MessageData&gt; userMessages = getUserMessageMap(bookmarkUser);</span>
+<span class="nc" id="L331">                        MessageData messageData = userMessages.get(message);</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">                        if (messageData != null) {</span>
+<span class="nc" id="L333">                            messageData.setBookmarked(true);</span>
+<span class="nc" id="L334">                            messageData.addBookmarkedUser(bookmarkUser);</span>
+                        }
+                    }
+<span class="nc" id="L337">                }</span>
+            }
+<span class="fc" id="L339">        }</span>
+
+        // récupération du currentUser
+<span class="fc" id="L342">        setCurrentUser(findUserByTag(data.getCurrentUser()));</span>
+<span class="fc" id="L343">    }</span>
+
+    /**
+     * Exports the model data to a YData object.
+     */
+    public YData exportData() {
+<span class="fc" id="L349">        YData data = new YData();</span>
+
+        // création des utilisateurs dans les DTO
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        for (User user : users) {</span>
+<span class="fc" id="L353">            UserDTO userDTO = new UserDTO();</span>
+<span class="fc" id="L354">            userDTO.setUsertag(user.getUserTag());</span>
+<span class="fc" id="L355">            userDTO.setUserStrategy(currentStrategyUser.get(findUserByTag(userDTO.getUsertag())));</span>
+<span class="fc" id="L356">            data.getUsers().add(userDTO);</span>
+<span class="fc" id="L357">        }</span>
+
+        // on récupère la map des messages QUE du premier utilisateur (si existant)
+<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (!users.isEmpty()) {</span>
+<span class="fc" id="L361">            User firstUser = users.get(0);</span>
+<span class="fc" id="L362">            Map&lt;Message, MessageData&gt; messages = getUserMessageMap(firstUser);</span>
+
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            for (Map.Entry&lt;Message, MessageData&gt; messageEntry : messages.entrySet()) {</span>
+<span class="fc" id="L365">                Message message = messageEntry.getKey();</span>
+<span class="fc" id="L366">                MessageData messageData = messageEntry.getValue();</span>
+
+<span class="fc" id="L368">                List&lt;String&gt; bookmarkedByUsers = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                for (User bookmarkedUser : messageData.getBookmarkedUsers()) {</span>
+<span class="nc" id="L370">                    bookmarkedByUsers.add(bookmarkedUser.getUserTag());</span>
+<span class="nc" id="L371">                }</span>
+
+<span class="fc" id="L373">                MessageDTO messageDTO = new MessageDTO(</span>
+<span class="fc" id="L374">                        message.getIdMessage(),</span>
+<span class="fc" id="L375">                        messageData.getUser().getUserTag(),</span>
+<span class="fc" id="L376">                        message.getContent(),</span>
+<span class="fc" id="L377">                        messageData.getDate().getTime(),</span>
+                        bookmarkedByUsers
+                );
+<span class="fc" id="L380">                data.getMessages().add(messageDTO);</span>
+<span class="fc" id="L381">            }</span>
+        }
+
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">        if (currentUser != null) {</span>
+<span class="fc" id="L385">            data.setCurrentUser(currentUser.getUserTag());</span>
+        } else {
+<span class="nc" id="L387">            data.setCurrentUser(null);</span>
+        }
+
+<span class="fc" id="L390">        return data;</span>
+    }
+
+    /**
+     * Set the User Message Map. (for debug)
+     */
+    public static void printMessageMap(final Map&lt;Message, MessageData&gt; messageMap) {
+        // Vérifier si la Map est null
+<span class="nc bnc" id="L398" title="All 2 branches missed.">        if (messageMap == null) {</span>
+<span class="nc" id="L399">            System.out.println(&quot;La map est null.&quot;);</span>
+<span class="nc" id="L400">            return;</span>
+        }
+
+        // Vérifier si la Map est vide
+<span class="nc bnc" id="L404" title="All 2 branches missed.">        if (messageMap.isEmpty()) {</span>
+<span class="nc" id="L405">            System.out.println(&quot;La map est vide.&quot;);</span>
+<span class="nc" id="L406">            return;</span>
+        }
+
+        // Afficher le contenu de la Map
+<span class="nc" id="L410">        System.out.println(&quot;Contenu de la Map :&quot;);</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">        for (Map.Entry&lt;Message, MessageData&gt; entry : messageMap.entrySet()) {</span>
+<span class="nc" id="L412">            Message key = entry.getKey();</span>
+<span class="nc" id="L413">            MessageData value = entry.getValue();</span>
+<span class="nc" id="L414">            System.out.println(&quot;Message: &quot;</span>
+<span class="nc" id="L415">                    + key.getContent()</span>
+<span class="nc" id="L416">                    + &quot; | Score: &quot; + value.getScore()</span>
+<span class="nc" id="L417">                    + &quot; | Bookmarked: &quot; + value.isBookmarked());</span>
+<span class="nc" id="L418">        }</span>
+<span class="nc" id="L419">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,11 @@
+fr/univ_lyon1/info/m1/microblog/model/SortingTest.class
+fr/univ_lyon1/info/m1/microblog/model/MessageTest.class
+fr/univ_lyon1/info/m1/microblog/model/ScoringTest.class
+fr/univ_lyon1/info/m1/microblog/dto/UserDTOTest.class
+fr/univ_lyon1/info/m1/microblog/model/MessageDataTest.class
+fr/univ_lyon1/info/m1/microblog/model/UserTest.class
+fr/univ_lyon1/info/m1/microblog/view/JfxViewTest.class
+fr/univ_lyon1/info/m1/microblog/dto/YDataTest.class
+fr/univ_lyon1/info/m1/microblog/controller/ControllerTest.class
+fr/univ_lyon1/info/m1/microblog/dto/MessageDTOTest.class
+fr/univ_lyon1/info/m1/microblog/model/YTest.class

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>YData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.dto</a> &gt; <span class="el_source">YData.java</span></div><h1>YData.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Data Transfer Object for the Y class.
+ * This class holds lists of users and messages.
+ */
+<span class="fc" id="L10">public class YData {</span>
+<span class="fc" id="L11">    private List&lt;UserDTO&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L12">    private List&lt;MessageDTO&gt; messages = new ArrayList&lt;&gt;();</span>
+    private String currentUser;
+
+    /**
+     * Gets the list of users.
+     *
+     * @return List of users
+     */
+    public List&lt;UserDTO&gt; getUsers() {
+<span class="fc" id="L21">        return users;</span>
+    }
+
+    /**
+     * Sets the list of users.
+     *
+     * @param users List of users
+     */
+    public void setUsers(final List&lt;UserDTO&gt; users) {
+<span class="fc" id="L30">        this.users = users;</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Gets the list of messages.
+     *
+     * @return List of messages
+     */
+    public List&lt;MessageDTO&gt; getMessages() {
+<span class="fc" id="L39">        return messages;</span>
+    }
+
+    /**
+     * Sets the list of messages.
+     *
+     * @param messages List of messages
+     */
+    public void setMessages(final List&lt;MessageDTO&gt; messages) {
+<span class="fc" id="L48">        this.messages = messages;</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Gets the current user logged in the application.
+     *
+     * @return the current user
+     */
+    public String getCurrentUser() {
+<span class="fc" id="L57">        return currentUser;</span>
+    }
+
+    /**
+     * Sets the current user logged in the application.
+     *
+     * @param currentUser the userTag of the current user
+     */
+    public void setCurrentUser(final String currentUser) {
+<span class="fc" id="L66">        this.currentUser = currentUser;</span>
+<span class="fc" id="L67">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

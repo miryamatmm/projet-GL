@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JfxView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.view</a> &gt; <span class="el_source">JfxView.java</span></div><h1>JfxView.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.view;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Collection;
+
+import fr.univ_lyon1.info.m1.microblog.controller.Controller;
+import fr.univ_lyon1.info.m1.microblog.model.Message;
+import fr.univ_lyon1.info.m1.microblog.model.MessageData;
+import fr.univ_lyon1.info.m1.microblog.model.User;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
+import javafx.scene.input.KeyCode;
+
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
+
+import javafx.stage.Stage;
+import javafx.geometry.Pos;
+
+/**
+ * Main class of the View (GUI) of the application.
+ */
+public class JfxView {
+    private Controller controller;
+    private final VBox root;
+    private final VBox userMsgBox;
+
+    /**
+     * Main view of the application.
+     */
+    public JfxView(final Stage stage,
+<span class="fc" id="L42">                   final int width, final int height) {</span>
+<span class="fc" id="L43">        stage.setTitle(&quot;Y Microblogging&quot;);</span>
+
+<span class="fc" id="L45">        root = new VBox(10);</span>
+<span class="fc" id="L46">        userMsgBox = new VBox(10);</span>
+
+        // Everything's ready: add it to the scene and display it
+<span class="fc" id="L49">        final Scene scene = new Scene(root, width, height);</span>
+<span class="fc" id="L50">        stage.setScene(scene);</span>
+<span class="fc" id="L51">        stage.show();</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Set the Controller for the view.
+     */
+    public void setController(final Controller controller) {
+<span class="fc" id="L58">        this.controller = controller;</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Create the main view with a list of users, allowing the selection of a user
+     * to view their feed.
+     */
+
+    public void  createUserSelectionPane(final Collection&lt;User&gt; usersList) {
+<span class="fc" id="L67">        root.getChildren().clear();</span>
+
+        // création d'un VBox pour contenir le titre et la liste des utilisateurs
+<span class="fc" id="L70">        VBox userSelectionBox = new VBox(15);</span>
+<span class="fc" id="L71">        userSelectionBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L72">        userSelectionBox.setPrefWidth(Double.MAX_VALUE);</span>
+<span class="fc" id="L73">        userSelectionBox.setMaxWidth(Double.MAX_VALUE);</span>
+
+<span class="fc" id="L75">        Label chooseUserLabel = new Label(&quot;Login&quot;);</span>
+<span class="fc" id="L76">        chooseUserLabel.setStyle(&quot;-fx-font-size: 20px; -fx-padding: 10px;&quot;);</span>
+<span class="fc" id="L77">        chooseUserLabel.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L78">        userSelectionBox.getChildren().add(chooseUserLabel);</span>
+
+        // on affiche tous les users possibles
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        for (User u : usersList) {</span>
+<span class="fc" id="L82">            Button userButton = new Button(&quot;@&quot; + u.getUserTag());</span>
+
+<span class="fc" id="L84">            userButton.setStyle(USER_BUTTON_STYLE);</span>
+
+<span class="fc" id="L86">            userButton.setOnAction(e -&gt; {</span>
+<span class="nc" id="L87">                controller.selectUser(u);</span>
+<span class="nc" id="L88">            });</span>
+
+<span class="fc" id="L90">            userSelectionBox.getChildren().add(userButton);</span>
+<span class="fc" id="L91">        }</span>
+
+        // on crée un ScrollPane et on ajoute la VBox dedans
+<span class="fc" id="L94">        ScrollPane userSelectionPane = new ScrollPane(userSelectionBox);</span>
+<span class="fc" id="L95">        userSelectionPane.setFitToWidth(true);</span>
+<span class="fc" id="L96">        userSelectionPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);</span>
+<span class="fc" id="L97">        userSelectionPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);</span>
+
+<span class="fc" id="L99">        root.getChildren().add(userSelectionPane);</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Sets up the header and controls for the selected user's feed.
+     * This includes the logout button, the feed title, and the sorting preferences selector.
+     */
+    public void setupUserFeedHeader(final String userTag) {
+<span class="fc" id="L107">        userMsgBox.getChildren().clear();</span>
+
+<span class="fc" id="L109">        HBox headerBox = new HBox();</span>
+<span class="fc" id="L110">        headerBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L111">        headerBox.setSpacing(20);</span>
+
+<span class="fc" id="L113">        Label userHeader = new Label(&quot;Feed of @&quot; + userTag);</span>
+<span class="fc" id="L114">        userHeader.setStyle(HEADER_STYLE);</span>
+
+<span class="fc" id="L116">        Button backButton = new Button(&quot;Logout&quot;);</span>
+<span class="fc" id="L117">        backButton.setStyle(BACKBUTTON_STYLE);</span>
+<span class="fc" id="L118">        backButton.setOnAction(e -&gt; {</span>
+<span class="nc" id="L119">            controller.backToUsersList();</span>
+<span class="nc" id="L120">        });</span>
+
+<span class="fc" id="L122">        HBox strategyBox = new HBox();</span>
+<span class="fc" id="L123">        strategyBox.setAlignment(Pos.CENTER);</span>
+<span class="fc" id="L124">        strategyBox.setSpacing(20);</span>
+
+<span class="fc" id="L126">        Pane strategySelector = createScoringStrategySelector();</span>
+
+<span class="fc" id="L128">        headerBox.getChildren().add(userHeader);</span>
+<span class="fc" id="L129">        strategyBox.getChildren().add(strategySelector);</span>
+<span class="fc" id="L130">        userMsgBox.getChildren().addAll(backButton, headerBox, strategyBox);</span>
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * Adds a single message to the currently displayed user's feed.
+     *
+     * @param m The message to display.
+     * @param d The metadata associated with the message (e.g., score, creation date).
+     * @param u The user who created the message.
+     */
+    public void addMessageToFeed(final Message m, final MessageData d, final User u) {
+<span class="fc" id="L141">        userMsgBox.setAlignment(Pos.CENTER_LEFT);</span>
+<span class="fc" id="L142">        userMsgBox.setFillWidth(true);</span>
+
+<span class="fc" id="L144">        VBox msgBox = createMessageWidget(m, d, u);</span>
+<span class="fc" id="L145">        userMsgBox.getChildren().add(msgBox);</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Displays the complete feed for the selected user,
+     * including the input field for creating new messages.
+     *
+     * @param u The user whose feed is being displayed.
+     */
+    public void showUserFeed(final User u) {
+<span class="fc" id="L155">        Pane textBox = createInputWidget(u);</span>
+<span class="fc" id="L156">        userMsgBox.getChildren().add(textBox);</span>
+
+<span class="fc" id="L158">        ScrollPane scrollPane = new ScrollPane(userMsgBox);</span>
+<span class="fc" id="L159">        scrollPane.setFitToWidth(true);</span>
+
+<span class="fc" id="L161">        StackPane centeredPane = new StackPane();</span>
+<span class="fc" id="L162">        centeredPane.getChildren().add(scrollPane);</span>
+<span class="fc" id="L163">        StackPane.setAlignment(scrollPane, Pos.CENTER);</span>
+
+<span class="fc" id="L165">        root.getChildren().clear();</span>
+<span class="fc" id="L166">        root.getChildren().add(centeredPane);</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Create the widget where appears messages.
+    */
+    public VBox createMessageWidget(
+            final Message m,
+            final MessageData d,
+            final User u) {
+<span class="fc" id="L176">        VBox msgBox = new VBox();</span>
+
+<span class="fc" id="L178">        String bookmarkText = controller.bookmarkText(d);</span>
+<span class="fc" id="L179">        Button bookButton = new Button(bookmarkText);</span>
+<span class="fc" id="L180">        bookButton.setOnAction(e -&gt; { </span>
+<span class="nc" id="L181">            controller.handlerBookmarkButton(d, m, bookButton, u);</span>
+<span class="nc" id="L182">        });</span>
+
+<span class="fc" id="L184">        Button deleteButton = new Button(&quot;X&quot;);</span>
+<span class="fc" id="L185">        deleteButton.setOnAction(e -&gt; {</span>
+<span class="nc" id="L186">            controller.deleteMessage(m); </span>
+<span class="nc" id="L187">        });</span>
+
+<span class="fc" id="L189">        HBox buttonBox = new HBox();</span>
+
+        // pour bien l'aligner 
+<span class="fc" id="L192">        buttonBox.setAlignment(Pos.CENTER_RIGHT);</span>
+<span class="fc" id="L193">        buttonBox.getChildren().addAll(bookButton, deleteButton);</span>
+
+<span class="fc" id="L195">        msgBox.getChildren().add(buttonBox);</span>
+
+<span class="fc" id="L197">        final Label label = new Label(m.getContent());</span>
+<span class="fc" id="L198">        msgBox.getChildren().add(label);</span>
+
+<span class="fc" id="L200">        final Label score = new Label(&quot;Score: &quot; + d.getScore());</span>
+<span class="fc" id="L201">        score.setTextFill(Color.GRAY);</span>
+<span class="fc" id="L202">        msgBox.getChildren().add(score);</span>
+
+<span class="fc" id="L204">        final Label userTag = new Label(&quot;@&quot; + d.getUser().getUserTag());</span>
+<span class="fc" id="L205">        userTag.setTextFill(Color.DEEPPINK);</span>
+<span class="fc" id="L206">        msgBox.getChildren().add(userTag);</span>
+
+<span class="fc" id="L208">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;dd/MM/yyyy 'at' HH'h'mm&quot;);</span>
+<span class="fc" id="L209">        final Label date = new Label(&quot;Creation date: &quot; + sdf.format(d.getDate()));</span>
+<span class="fc" id="L210">        date.setTextFill(Color.HOTPINK);</span>
+<span class="fc" id="L211">        msgBox.getChildren().add(date);</span>
+
+<span class="fc" id="L213">        msgBox.setStyle(MSG_STYLE);</span>
+<span class="fc" id="L214">        return msgBox;</span>
+    }
+
+    /**
+     * Create the ComboBox to select the strategy.
+     */
+    public Pane createScoringStrategySelector() {
+<span class="fc" id="L221">        HBox strategyBox = new HBox(10);</span>
+<span class="fc" id="L222">        strategyBox.setStyle(STRATEGY_BOX_STYLE);</span>
+<span class="fc" id="L223">        strategyBox.setAlignment(Pos.CENTER);</span>
+
+<span class="fc" id="L225">        ComboBox&lt;String&gt; c = new ComboBox&lt;&gt;();</span>
+<span class="fc" id="L226">        c.getItems().addAll(</span>
+                &quot;Par ordre chronologique&quot;, // DateSorting
+                &quot;Messages les plus pertinents récents&quot;, // ScoreSorting + DS + MS  + BS
+                &quot;Messages les plus pertinents&quot; // ScoreSorting + MalusScoring + BookmarkScoring
+        );
+
+<span class="fc" id="L232">        c.setPromptText(&quot;Préférences de tri&quot;);</span>
+<span class="fc" id="L233">        c.setStyle(COMBOBOX_STYLE);</span>
+
+<span class="fc" id="L235">        c.setOnAction(e -&gt; {</span>
+<span class="nc" id="L236">            String selectedOption = c.getValue();</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (selectedOption != null) {</span>
+<span class="nc" id="L238">                controller.applyStrategy(selectedOption);</span>
+            }
+<span class="nc" id="L240">        });</span>
+
+<span class="fc" id="L242">        strategyBox.getChildren().add(c);</span>
+<span class="fc" id="L243">        return strategyBox;</span>
+    }
+
+
+    /**
+     * Create input widget.
+    */
+    private Pane createInputWidget(final User u) {
+<span class="fc" id="L251">        final Pane input = new HBox();</span>
+<span class="fc" id="L252">        TextArea t = new TextArea();</span>
+<span class="fc" id="L253">        t.setPrefWidth(400); // minimum</span>
+<span class="fc" id="L254">        t.setMaxWidth(500);  // maximum</span>
+<span class="fc" id="L255">        HBox.setHgrow(t, Priority.ALWAYS); // si j'ai la place</span>
+<span class="fc" id="L256">        t.setOnKeyPressed(e -&gt; {</span>
+<span class="nc bnc" id="L257" title="All 4 branches missed.">            if (e.getCode() == KeyCode.ENTER &amp;&amp; e.isControlDown()) {</span>
+<span class="nc" id="L258">                controller.publish(t, u);</span>
+<span class="nc" id="L259">                t.clear();</span>
+            }
+<span class="nc" id="L261">        });</span>
+<span class="fc" id="L262">        Button s = new Button(&quot;Publish&quot;);</span>
+<span class="fc" id="L263">        s.setOnAction(e -&gt; {</span>
+<span class="nc" id="L264">            controller.publish(t, u);</span>
+<span class="nc" id="L265">            t.clear();</span>
+<span class="nc" id="L266">        });</span>
+
+<span class="fc" id="L268">        input.getChildren().addAll(t, s);</span>
+<span class="fc" id="L269">        return input;</span>
+    }
+
+    // un peu de style
+    static final String MSG_STYLE = &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 1.5px; &quot;
+            + &quot;-fx-border-radius: 15px; &quot;
+            + &quot;-fx-background-radius: 15px; &quot;
+            + &quot;-fx-padding: 12px; &quot;
+            + &quot;-fx-margin: 8px; &quot;
+            + &quot;-fx-font-size: 14px; &quot;
+            + &quot;-fx-text-fill: #B56576;&quot;;
+
+    static final String USER_BUTTON_STYLE = &quot;-fx-font-size: 16px; &quot;
+            + &quot;-fx-padding: 15px 20px; &quot;
+            + &quot;-fx-background-color: #FCE4EC; &quot;
+            + &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 2px; &quot;
+            + &quot;-fx-border-radius: 8px; &quot;
+            + &quot;-fx-background-radius: 8px; &quot;
+            + &quot;-fx-text-fill: #9A1750; &quot;
+            + &quot;-fx-pref-width: 200px; &quot;
+            + &quot;-fx-pref-height: 40px;&quot;
+            + &quot;-fx-effect: dropshadow(three-pass-box, rgba(255,182,193,0.5), 10, 0.3, 0, 4);&quot;;
+
+    static final String HEADER_STYLE = &quot;-fx-font-size: 20px; &quot;
+            + &quot;-fx-padding: 12px 20px; &quot;
+            + &quot;-fx-background-color: #FCE4EC; &quot;
+            + &quot;-fx-text-fill: #9A1750; &quot;
+            + &quot;-fx-font-family: 'Georgia', serif; &quot;
+            + &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 1.5px; &quot;
+            + &quot;-fx-border-radius: 10px;&quot;;
+
+    static final String BACKBUTTON_STYLE = &quot;-fx-font-size: 16px; &quot;
+            + &quot;-fx-padding: 10px 15px; &quot;
+            + &quot;-fx-background-color: #FCE4EC; &quot;
+            + &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 1.5px; &quot;
+            + &quot;-fx-border-radius: 6px; &quot;
+            + &quot;-fx-background-radius: 6px; &quot;
+            + &quot;-fx-text-fill: #9A1750; &quot;
+            + &quot;-fx-font-family: 'Georgia', serif; &quot;;
+
+
+    static final String STRATEGY_BOX_STYLE = &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 1px; &quot;
+            + &quot;-fx-border-radius: 10px; &quot;
+            + &quot;-fx-background-color: #FCE4EC; &quot;
+            + &quot;-fx-padding: 5px; &quot;
+            + &quot;-fx-spacing: 0px; &quot;;
+
+    static final String COMBOBOX_STYLE = &quot;-fx-font-size: 14px; &quot;
+            + &quot;-fx-padding: 4px 5px; &quot;
+            + &quot;-fx-background-color: #FFFFFF; &quot;
+            + &quot;-fx-border-color: #FFC1D9; &quot;
+            + &quot;-fx-border-width: 1.5px; &quot;
+            + &quot;-fx-border-radius: 8px; &quot;
+            + &quot;-fx-background-radius: 8px; &quot;
+            + &quot;-fx-text-fill: #B56576; &quot;
+            + &quot;-fx-prompt-text-fill: #B56576;&quot;;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

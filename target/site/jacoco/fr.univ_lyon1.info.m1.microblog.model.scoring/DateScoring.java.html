@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DateScoring.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.model.scoring</a> &gt; <span class="el_source">DateScoring.java</span></div><h1>DateScoring.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.model.scoring;
+
+import fr.univ_lyon1.info.m1.microblog.model.Message;
+import fr.univ_lyon1.info.m1.microblog.model.MessageData;
+import fr.univ_lyon1.info.m1.microblog.model.User;
+
+/** 
+ * Scoring based on the date. 
+*/
+<span class="fc" id="L10">public class DateScoring implements ScoringStrategies {</span>
+
+    @Override
+    public int calculateScore(final Message message, 
+                              final MessageData messageData, 
+                              final User user) {
+<span class="fc" id="L16">        long currentTime = System.currentTimeMillis(); </span>
+<span class="fc" id="L17">        long messageTime = messageData.getDate().getTime(); // la date en ms</span>
+<span class="fc" id="L18">        long timeSinceCreation = currentTime - messageTime;</span>
+
+        // les messages postés il y a
+        // moins de 7 jours auront un bonus d'un point, 
+        // ceux postés il y a moins de 24
+        // heures un bonus supplémentaire d'un point.
+
+<span class="fc" id="L25">        int score = 0;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (timeSinceCreation &lt;= 86400000) { //  (24h * 60min * 60sec * 1000ms)</span>
+<span class="fc" id="L27">            score = 2;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        } else if (timeSinceCreation &lt;= 604800000) { // (7j * 24h * 60min * 60sec * 1000ms)</span>
+<span class="fc" id="L29">            score = 1; </span>
+        }
+<span class="fc" id="L31">        return score;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L36">        return &quot;Par ordre chronologique&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScoringSystem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Y Microblogging</a> &gt; <a href="index.source.html" class="el_package">fr.univ_lyon1.info.m1.microblog.model.scoring</a> &gt; <span class="el_source">ScoringSystem.java</span></div><h1>ScoringSystem.java</h1><pre class="source lang-java linenums">package fr.univ_lyon1.info.m1.microblog.model.scoring;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import fr.univ_lyon1.info.m1.microblog.model.Message;
+import fr.univ_lyon1.info.m1.microblog.model.MessageData;
+import fr.univ_lyon1.info.m1.microblog.model.User;
+
+/**
+ * Every strategy used in the program.
+ */
+<span class="fc" id="L15">public class ScoringSystem {</span>
+<span class="fc" id="L16">        private final List&lt;ScoringStrategies&gt; rules = new ArrayList&lt;&gt;();</span>
+        
+        /**
+         * Add rule.
+         */
+        public void addRule(final ScoringStrategies rule) {
+<span class="fc" id="L22">                rules.add(rule);</span>
+<span class="fc" id="L23">        }</span>
+
+        /**
+         * Clear rules.
+         */
+        public void clearRules() {
+<span class="fc" id="L29">                rules.clear();</span>
+<span class="fc" id="L30">        }</span>
+
+        /**
+         * Get rules.
+         */
+        public List&lt;ScoringStrategies&gt; getRules() {
+<span class="fc" id="L36">                return rules;</span>
+        }
+        
+        
+        /** 
+         * Calculate total score of all scoring strategies. 
+         */
+        public void calculateTotalScore(final Map&lt;Message, MessageData&gt; messagesData,
+                                        final User user) {
+<span class="fc" id="L45">                messagesData.values().forEach(data -&gt; data.setScore(1));</span>
+<span class="fc" id="L46">                Set&lt;Message&gt; messages = messagesData.keySet();</span>
+<span class="fc" id="L47">                messages.forEach((Message m) -&gt; {</span>
+<span class="fc" id="L48">                        MessageData d = messagesData.get(m);</span>
+                        // on initialise à 1 tout les messages pour qu'ils s'affichent tous 
+                        // par défaut après c'est selon les preferences de tri
+<span class="fc" id="L51">                        int score = 1; </span>
+<span class="fc" id="L52">                        score += rules.stream()</span>
+<span class="fc" id="L53">                                        .mapToInt(rule -&gt; rule.calculateScore(m, d, user))</span>
+<span class="fc" id="L54">                                        .sum();</span>
+<span class="fc" id="L55">                        d.setScore(score);</span>
+<span class="fc" id="L56">                        });</span>
+<span class="fc" id="L57">        }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
