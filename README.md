@@ -136,6 +136,6 @@ mvn clean
 # Compiler + tester + packager (build complet)
 mvn clean install
 
-# Exécuter l’application (option 1 — peut afficher un warning)
+# Exécuter l’application
 mvn compile
 mvn exec:java
