@@ -1,4 +1,4 @@
-# 🐦 Y Microblogging — Projet Java (MIF01 - Génie Logiciel)
+# Y Microblogging — Projet Java (MIF01 - Génie Logiciel)
 
 > Application de microblogging en Java inspirée de Twitter, développée dans le cadre de l’UE Génie Logiciel (décembre 2024).
 
