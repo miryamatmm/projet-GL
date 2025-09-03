@@ -2,7 +2,7 @@
 
 > Application de microblogging en Java inspirée de Twitter, développée dans le cadre de l’UE Génie Logiciel (décembre 2024).
 
-## ✨ Présentation
+## Présentation
 
 **Y Microblogging** permet à des utilisateurs de publier, supprimer, trier, bookmarker et consulter des messages. L'application garantit la **persistance des données**, le **tri personnalisé** des messages, et repose sur les principes de **programmation orientée objet** : encapsulation, héritage, composition.
 
@@ -10,7 +10,7 @@ Les messages sont enrichis par un **système de scoring** et de **tri dynamique*
 
 ---
 
-## ⚙️ Technologies
+## Technologies
 
 - **Langage** : Java 
 - **Interface graphique** : JavaFX
@@ -19,53 +19,53 @@ Les messages sont enrichis par un **système de scoring** et de **tri dynamique*
 
 ---
 
-## 🧠 Architecture
+## Architecture
 
 L’application est structurée selon le pattern **MVC (Modèle-Vue-Contrôleur)** avec un **modèle passif** :
 
-### 📦 Modèle (Model)
+### Modèle (Model)
 - Gestion des utilisateurs et messages
 - Système de scoring (bonus/malus)
 - Stratégies de tri
 - Persistance des données (import/export)
 
-### 🖥 Vue (View)
+### Vue (View)
 - Interface utilisateur JavaFX
 - Affichage des messages et interactions
 - Déléguée au contrôleur
 
-### 🧩 Contrôleur (Controller)
+### Contrôleur (Controller)
 - Communication entre Vue et Modèle
 - Gestion des événements utilisateurs
 - Sélection d’utilisateur, publication, tri
 
 ---
 
-## 🧱 Design Patterns utilisés
+## Design Patterns utilisés
 
-### 🔁 MVC
+### MVC
 Séparation claire entre logique métier, affichage et gestion des interactions.
 
-### 🛠 Creator
+### Creator
 - Création des utilisateurs et messages via la classe `Y`
 - Création des vues via le contrôleur
 
-### 🎯 Strategy
+### Strategy
 - `ScoringStrategy` : permet d’appliquer plusieurs règles de score (pertinence, date, mots interdits…)
 - `SortingStrategy` : tri par pertinence ou date
 
 ---
 
-## 🧪 Tests
+## Tests
 
 Des tests **manuels** et **automatisés** ont été réalisés :
 
-### ✅ Vue
+### Vue
 - Affichage, publication, bookmark, suppression
 - Mise à jour dynamique
 - Déconnexion
 
-### ✅ Contrôleur
+### Contrôleur
 - Sélection d’utilisateur
 - Actualisation de la vue
 - Application des filtres de visibilité
@@ -73,7 +73,7 @@ Des tests **manuels** et **automatisés** ont été réalisés :
 
 ---
 
-## 🔐 Éthique & algorithmes
+## Éthique & algorithmes
 
 Une réflexion a été menée sur l’usage éthique des systèmes de recommandation :
 
@@ -81,11 +81,11 @@ Une réflexion a été menée sur l’usage éthique des systèmes de recommanda
 - Système de scoring contrôlé, sans exploitation abusive des données
 - Sensibilisation aux **bulles de filtres** et à leurs impacts
 
-📚 *Voir sources dans le rapport, notamment Amnesty International & Le Monde sur TikTok.*
+*Voir sources dans le rapport, notamment Amnesty International & Le Monde sur TikTok.*
 
 ---
 
-## 🧠 Leçons tirées
+## Leçons tirées
 
 - Maîtrise de l’architecture MVC
 - Refactorisation propre d’un squelette existant
@@ -95,7 +95,7 @@ Une réflexion a été menée sur l’usage éthique des systèmes de recommanda
 
 ---
 
-## 👩‍💻 Auteurs
+## Auteurs
 
 - **Atamna Miryam**
 - **El Ouarrad Mariam**
@@ -121,7 +121,7 @@ Université Claude Bernard Lyon 1 — MIF01 — Décembre 2024
 
 ---
 
-## 🏁 Lancer le projet
+## Lancer le projet
 
 ```bash
 # Compiler le projet
